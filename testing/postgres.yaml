@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-jhe-postgres
+spec:
+  selector:
+    app.kubernetes.io/name: test-jhe-postgres
+  ports:
+    - name: pg
+      port: 5432
+      targetPort: pg
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app.kubernetes.io/name: test-jhe-postgres
+  name: test-jhe-postgres
+spec:
+  containers:
+  - name: postgres
+    image: postgres:18
+    env:
+      # should match testing values.yaml
+      # could also use secretKeyRefs
+      - name: POSTGRES_USER
+        value: test-jhe-user
+      - name: POSTGRES_PASSWORD
+        value: test-jhe-pass
+      - name: POSTGRES_DB
+        value: test-jhe-db
+    ports:
+    - containerPort: 5432
+      name: pg
+      protocol: TCP

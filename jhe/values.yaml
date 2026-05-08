@@ -1,0 +1,89 @@
+
+# JHE stuff
+
+db:
+  name: postgres
+  user: postgres
+  password:
+  host:
+  port: 5432
+
+debug:
+  enabled: false
+
+image: ghcr.io/jupyterhealth/jupyterhealth-exchange:v0.0.10
+imagePullPolicy:
+
+migrate:
+  enabled: true
+
+args: []
+volumeMounts: []
+workers: 2
+
+env: 
+  SITE_TITLE: JupyterHealth Exchange
+
+# first-time generate these secret environment variables
+_secret_env:
+  - SECRET_KEY
+
+resources:
+
+# kubernetes stuff
+nameOverride:
+fullnameOverride:
+
+deploymentStrategy:
+
+replicas: 1
+
+pdb:
+  enabled: false
+  spec:
+    maxUnavailable:
+    minAvailable: 1
+
+service:
+  type: LoadBalancer
+  labels: {}
+  annotations: {}
+  nodePorts:
+    http:
+    https:
+  disableHttpPort: false
+  extraPorts: []
+  externalIPs: []
+  loadBalancerIP:
+  loadBalancerSourceRanges: []
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies: []
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  hostnames: []
+  gateway:
+    name: your-gateway
+    namespace: "" # required for a gateway resource in another namespace
+
+ingress:
+  enabled: false
+  annotations: {}
+  ingressClassName:
+  hosts: []
+  path: /
+  pathSuffix:
+  pathType: Prefix
+  tls: []
+  extraPaths: []
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 13
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 3
+  periodSeconds: 11

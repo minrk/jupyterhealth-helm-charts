@@ -1,9 +1,9 @@
 apiVersion: v2
-name: jupyterhealth
+name: jhe
 version: 0.0.1-set.by.chartpress
 appVersion: "0.0.10"
 description: JupyterHealth helm chart
-keywords: [jupyter, jupyterhub, z2jh]
+keywords: [jupyter, jupyterhealth]
 home: https://jupyterhealth.org
 sources:
   - https://github.com/jupyterhealth/helm-charts

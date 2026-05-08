@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "jhe.fullname" . }}
+  labels:
+    app.kubernetes.io/component: jhe
+    {{- include "jhe.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: jhe
+      {{- include "jhe.matchLabels" . | nindent 6 }}
+  {{- if .Values.deploymentStrategy }}
+  strategy:
+    {{- .Values.deploymentStrategy | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: jhe
+        {{- include "jhe.matchLabels" . | nindent 8 }}
+      annotations:
+        # This lets us autorestart when the secret changes!
+        checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.annotations }}
+        {{- .Values.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
+    spec:
+      nodeSelector: {{ toJson .Values.nodeSelector }}
+      volumes:
+        {{- if .Values.extraVolumes }}
+        {{- .Values.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{- .Values.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}
+      {{- end }}
+      initContainers:
+      {{- if .Values.migrate.enabled }}
+        - name: migrate
+          image: {{ .Values.image }}
+          command:
+            - python3
+            - manage.py
+            - migrate
+          {{- with .Values.resources }}
+          resources:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
+          {{- with .Values.imagePullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "jhe.fullname" $ }}
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+        {{- end }}
+      containers:
+        - name: jhe
+          image: {{ .Values.image }}
+          command:
+            - gunicorn
+            - --bind
+            - ":8000"
+            - --workers
+            - {{ .Values.workers | quote }}
+            - jhe.wsgi
+            {{- if .Values.args }}
+            {{- .Values.args  | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- end }}
+
+          {{- if .Values.volumeMounts }}
+          volumeMounts:
+            {{- .Values.volumeMounts | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
+          {{- with .Values.imagePullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "jhe.fullname" $ }}
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          ports:
+            - containerPort: 8000
+              name: http
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            httpGet:
+              path: /
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            httpGet:
+              path: /
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost
+          {{- end }}

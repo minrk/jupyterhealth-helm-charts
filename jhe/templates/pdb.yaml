@@ -1,0 +1,16 @@
+{{- $pdb := .Values.pdb }}
+{{- if $pdb.enabled -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "jhe.fullname" . }}
+  labels:
+    {{- include "jhe.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "jhe.matchLabels" . | nindent 6 }}
+  {{- with $pdb.spec }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
+{{- end }}

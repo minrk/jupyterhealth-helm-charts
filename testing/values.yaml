@@ -1,0 +1,8 @@
+db:
+  name: test-jhe-db
+  user: test-jhe-user
+  password: test-jhe-pass
+  host: test-jhe-postgres
+
+ingress:
+  enabled: true
