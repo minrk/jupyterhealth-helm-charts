@@ -13,6 +13,9 @@ on:
     tags:
       - "**"
 
+permissions:
+  contents: read
+
 jobs:
   publish:
     environment: publish
@@ -47,7 +50,7 @@ jobs:
 
       - name: Install chart publishing dependencies (chartpress, helm)
         run: |
-          pip install chartpress pyyaml
+          pip install -r requirements.txt
           pip list
 
           helm version
