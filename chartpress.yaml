@@ -6,5 +6,7 @@ charts:
     # baseVersion should be managed via tbump
     baseVersion: "0.0.1-0.dev"
     repo:
-      git: jupyterhub/helm-chart
-      published: https://jupyterhub.github.io/helm-chart
+      # to test local publishing with `docker run --rm -p127.0.0.1:5000:5000 registry:3`
+      # oci: localhost:5000/jupyterhealth
+      oci: ghcr.io/jupyterhealth
+      published: https://ghcr.io/jupyterhealth/jhe
