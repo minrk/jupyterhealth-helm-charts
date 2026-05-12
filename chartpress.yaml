@@ -8,5 +8,5 @@ charts:
     repo:
       # to test local publishing with `docker run --rm -p127.0.0.1:5000:5000 registry:3`
       # oci: localhost:5000/jupyterhealth
-      oci: ghcr.io/jupyterhealth
-      published: https://ghcr.io/jupyterhealth/jhe
+      oci: ghcr.io/jupyterhealth/helm
+      published: https://ghcr.io/jupyterhealth/helm/jhe
