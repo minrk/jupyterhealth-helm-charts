@@ -66,4 +66,4 @@ jobs:
           repo="$(cat chartpress.yaml | yq '.charts[0].repo.oci')"
           published="$(cat chartpress.yaml | yq '.charts[0].repo.published')"
 
-          echo "published $repo version: $version at $published" >> "$GITHUB_SUMMARY"
+          echo "published $repo version: $version at $published" >> "$GITHUB_STEP_SUMMARY"
