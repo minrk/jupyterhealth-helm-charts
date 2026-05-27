@@ -58,12 +58,3 @@ jobs:
       - name: build chart with chartpress
         run: |
           chartpress --push --publish-chart
-
-      - name: Publish images and chart with chartpress
-        if: steps.publishing.outputs.publishing
-        env:
-          GITHUB_REPOSITORY: "${{ github.repository }}"
-        run: |
-          # Package the Helm chart and publish it to the gh-pages branch of
-          # the jupyterhub/helm-chart repo.
-          ./ci/publish
