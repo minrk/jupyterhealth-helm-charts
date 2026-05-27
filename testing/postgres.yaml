@@ -18,18 +18,18 @@ metadata:
   name: test-jhe-postgres
 spec:
   containers:
-  - name: postgres
-    image: postgres:18
-    env:
-      # should match testing values.yaml
-      # could also use secretKeyRefs
-      - name: POSTGRES_USER
-        value: test-jhe-user
-      - name: POSTGRES_PASSWORD
-        value: test-jhe-pass
-      - name: POSTGRES_DB
-        value: test-jhe-db
-    ports:
-    - containerPort: 5432
-      name: pg
-      protocol: TCP
+    - name: postgres
+      image: postgres:18
+      env:
+        # should match testing values.yaml
+        # could also use secretKeyRefs
+        - name: POSTGRES_USER
+          value: test-jhe-user
+        - name: POSTGRES_PASSWORD
+          value: test-jhe-pass
+        - name: POSTGRES_DB
+          value: test-jhe-db
+      ports:
+        - containerPort: 5432
+          name: pg
+          protocol: TCP
