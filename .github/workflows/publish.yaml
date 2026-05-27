@@ -59,3 +59,11 @@ jobs:
       - name: build chart with chartpress
         run: |
           chartpress --push --publish-chart
+
+      - name: add to github summary
+        run: |
+          version="$(cat jhe/Chart.yaml | yq .version)"
+          repo="$(cat chartpress.yaml | yq '.charts[0].repo.oci')"
+          published="$(cat chartpress.yaml | yq '.charts[0].repo.published')"
+
+          echo "published $repo version: $version at $published" >> "$GITHUB_SUMMARY"
