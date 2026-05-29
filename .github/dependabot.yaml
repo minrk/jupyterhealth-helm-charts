@@ -15,3 +15,7 @@ updates:
       interval: monthly
     cooldown:
       default-days: 7
+  - package-ecosystem: helm # zizmor: ignore[dependabot-cooldown]
+    directory: /jhe
+    schedule:
+      interval: daily
