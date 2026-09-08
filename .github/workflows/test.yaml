@@ -55,9 +55,11 @@ jobs:
       - uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2.8.0
 
       # set CT_CONFIG_DIR
+      # not sure why this isn't picked up by default on CI,
+      # it is when run locally
       - name: set ct config dir
         run: |
-          echo "CT_CONFIG_DIR=$PWD" >> $GITHUB_ENV
+          echo "CT_CONFIG_DIR=$PWD/.ct" >> $GITHUB_ENV
 
       - name: Run chart-testing (list-changed)
         id: list-changed
