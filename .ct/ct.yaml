@@ -1,0 +1,10 @@
+# See https://github.com/helm/chart-testing#configuration
+chart-dirs:
+  - .
+# don't check versions for chartpress
+check-version-increment: false
+validate-chart-schema: true
+validate-yaml: true
+debug: true
+helm-extra-args: >-
+  --timeout 180s

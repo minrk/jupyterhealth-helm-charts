@@ -1,0 +1,54 @@
+{{- if .Values.seed.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "jhe.fullname" . }}-seed
+  labels:
+    app.kubernetes.io/component: jhe-seed
+    {{- include "jhe.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": {{ .Values.seed.hook }}
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: {{ template "jhe.fullname" . }}-seed
+      labels:
+        app.kubernetes.io/component: jhe-seed
+        {{- include "jhe.matchLabels" . | nindent 8 }}
+    spec:
+      nodeSelector: {{ toJson .Values.nodeSelector }}
+      restartPolicy: OnFailure
+      volumes:
+        {{- if .Values.extraVolumes }}
+        {{- .Values.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: jhe
+          image: {{ .Values.image }}
+          command:
+            - python3
+            - manage.py
+            - seed
+            {{- if .Values.seed.args }}
+            {{- .Values.seed.args  | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- end }}
+
+          {{- if .Values.volumeMounts }}
+          volumeMounts:
+            {{- .Values.volumeMounts | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
+          {{- with .Values.imagePullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "jhe.fullname" $ }}
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+{{- end }}
