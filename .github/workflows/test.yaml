@@ -57,8 +57,11 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
+          ct list-changed
           changed=$(ct list-changed --target-branch ${GITHUB_EVENT_REPOSITORY_DEFAULT_BRANCH})
+          echo "$changed"
           if [[ -n "$changed" ]]; then
+            echo "changed! $changed"
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
         env:
