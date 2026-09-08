@@ -48,7 +48,7 @@ jobs:
       - name: Setup helm plugins
         run: |
           helm plugin install https://github.com/helm-unittest/helm-unittest.git --version v1.1.2 --verify=false
-          helm plugin install https://github.com/helm-unittest/helm-shc.git --version v1.1.2 --verify=false
+          helm plugin install https://github.com/losisin/helm-values-schema-json.git --version v2.6.0 --verify=false
 
       # setup chart-testing
       # https://github.com/helm/chart-testing-action
