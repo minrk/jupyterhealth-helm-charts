@@ -65,7 +65,6 @@ jobs:
           ct version
           ct list-changed --print-config
           changed=$(ct list-changed --target-branch ${GITHUB_EVENT_REPOSITORY_DEFAULT_BRANCH})
-          echo "$changed"
           if [[ -n "$changed" ]]; then
             echo "changed! $changed"
             echo "changed=true" >> "$GITHUB_OUTPUT"
