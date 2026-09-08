@@ -1,0 +1,45 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "jhe.fullname" . }}-postgres
+  labels:
+    app.kubernetes.io/component: postgres
+    {{- include "jhe.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: postgres
+      {{- include "jhe.matchLabels" . | nindent 6 }}
+  {{- if .Values.deploymentStrategy }}
+  strategy:
+    {{- .Values.deploymentStrategy | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: postgres
+        {{- include "jhe.matchLabels" . | nindent 8 }}
+      annotations:
+        # This lets us autorestart when the secret changes!
+        checksum/secret: {{ include (print .Template.BasePath "/postgres/secret.yaml") . | sha256sum }}
+        {{- if .Values.annotations }}
+        {{- .Values.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
+    spec:
+      nodeSelector: {{ toJson .Values.nodeSelector }}
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image }}
+          {{- with .Values.resources }}
+          resources:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "jhe.fullname" $ }}-postgres
+          ports:
+            - containerPort: 8000
+              name: pg
+{{- end }}

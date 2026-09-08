@@ -24,7 +24,7 @@ repos:
     rev: 0ee178619d696787ca73d210cc191d720868c631 # frozen: v3.9.6
     hooks:
       - id: prettier
-        exclude: ".*/templates/.*"
+        exclude: ".*/(templates/.*|values.schema.json)"
 
   # Reset Chart.yaml version and values.yaml image tags
   - repo: https://github.com/jupyterhub/chartpress

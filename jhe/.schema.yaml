@@ -1,0 +1,17 @@
+# Required
+# generate values.schema.json with
+# helm plugin install https://github.com/losisin/helm-values-schema-json.git --verify=False
+# helm schema
+values:
+  - values.yaml
+  # - ci/test-values.yaml
+
+draft: 2020
+indent: 2
+output: values.schema.json
+
+schemaRoot:
+  id: https://github.com/jupyterhealth/helm-charts/tree/HEAD/jhe/values.schema.json
+  title: JupyterHealth Exchange Helm Chart
+  description: Helm Chart for JupyterHealth Exchange
+  additionalProperties: false

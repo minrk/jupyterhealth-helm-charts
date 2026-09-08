@@ -1,0 +1,26 @@
+db:
+  user: pguser
+  name: jhe-test
+  password: test-password
+  host: jhe-test-postgres
+
+env:
+  SITE_URL: http://localhost:8081
+  ALLOWED_HOSTS: 127.0.0.1,localhost
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+
+postgres:
+  enabled: true
+  serviceName: jhe-test-postgres
+
+seed:
+  enabled: true
+  hook: post-upgrade
+  args:
+    - --flush-db
+    - --with-rich
