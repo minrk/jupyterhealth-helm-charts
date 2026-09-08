@@ -54,6 +54,11 @@ jobs:
       # https://github.com/helm/chart-testing-action
       - uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2.8.0
 
+      # set CT_CONFIG_DIR
+      - name: set ct config dir
+        run: |
+          echo "CT_CONFIG_DIR=$PWD" >> $GITHUB_ENV
+
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
