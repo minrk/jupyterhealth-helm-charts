@@ -60,3 +60,6 @@ repos:
 
 ci:
   autoupdate_schedule: monthly
+  skip:
+    # pre-commit.ci can't run docker
+    - shellcheck
