@@ -19,3 +19,7 @@ updates:
     directory: /jhe
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: ghcr.io/jupyterhealth/.*
+        versions:
+          - ">= 99999"
