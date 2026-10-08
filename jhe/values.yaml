@@ -111,6 +111,9 @@ httpRoute:
   annotations: {}
   hostnames: []
   parentRefs: []
+  timeouts:
+    request: 0s
+    backendRequest: 0s
 
 ingress:
   # -- Expose JHE via Ingress
@@ -195,6 +198,9 @@ mcp:
     annotations: {}
     hostnames: []
     parentRefs: []
+    timeouts:
+      request: 0s
+      backendRequest: 0s
 
   # -- Expose MCP Server via Ingress
   ingress:
@@ -349,6 +355,9 @@ openWearables:
     annotations: {}
     hostnames: []
     parentRefs: []
+    timeouts:
+      request: 30s
+      backendRequest: 0s
 
   ingress:
     # -- expose openWearables via ingress
